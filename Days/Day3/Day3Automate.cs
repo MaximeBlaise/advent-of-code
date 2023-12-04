@@ -14,17 +14,32 @@ namespace AdventOfCode2023.Days.Day3
         public bool IsBuildingDigit { get; set; }
 
         public int PartNumberSum { get; set; }
+        public Dictionary<(int, int), List<int>> Part2 { get; set; } = new(); // a renommer
+        public int CurrentLineIndex { get; set; }
 
         public int Run(string[] lines)
         {
             int sum = 0;
             for (int i = 0; i < lines.Length; i++)
             {
+                CurrentLineIndex = i;
+
                 var previousLine = ((i - 1) >= 0) ? lines[i - 1] : string.Empty;
                 var nextLine = ((i + 1) < lines.Length) ? lines[i + 1] : string.Empty;
 
                 sum += Run(previousLine, lines[i], nextLine);
             }
+
+            // part 2
+            var part2filtered = Part2.Where(x => x.Value.Count == 2);
+            int sumPart2 = 0;
+            foreach(var part2item in part2filtered) {
+                Console.WriteLine($"({part2item.Key.Item1},{part2item.Key.Item1}) -> {string.Join(',', part2item.Value)}");
+                int currentSum = part2item.Value[0] * part2item.Value[1];
+                sumPart2 += currentSum;
+            }
+            Console.WriteLine($"Sum part 2 : {sumPart2}");
+
             return sum;
         }
 
@@ -44,6 +59,13 @@ namespace AdventOfCode2023.Days.Day3
                     NumberBuffer = "";
                     IsBuildingDigit = false;
                 }
+            }
+            if (IsBuildingDigit)
+            { // sûrement mieux à faire 
+                EndIndex = line.Length - 1;
+                if (IsPartNumberValid(previousLine, line, nextLine))
+                        PartNumberSum += int.Parse(NumberBuffer);
+                IsBuildingDigit = false;
             }
 
             Console.WriteLine($" -> {PartNumberSum}");
@@ -74,16 +96,42 @@ namespace AdventOfCode2023.Days.Day3
 
             return false;
         }
+        
 
         public bool IsPartNumberValid(string previousLine, string line, string nextLine)
         {
-            for (int i = (BeginIndex - 1); i <= EndIndex; i++)
+            bool result = false;
+            for (int i = BeginIndex - 1; i <= EndIndex; i++)
             {
-                if (IsSymbol(previousLine, i) || IsSymbol(line, i) || IsSymbol(nextLine, i))
-                    return true;
+                // part 2
+                if (IsSymbol(previousLine, i) && previousLine[i] == '*') {
+                    AddNumberToPart2(CurrentLineIndex - 1, i, int.Parse(NumberBuffer));
+                }
+
+                if (IsSymbol(line, i) && line[i] == '*') {
+                    AddNumberToPart2(CurrentLineIndex, i, int.Parse(NumberBuffer));
+                }
+
+                if (IsSymbol(nextLine, i) && nextLine[i] == '*') {
+                    AddNumberToPart2(CurrentLineIndex + 1, i, int.Parse(NumberBuffer));
+                }
+
+
+                if (IsSymbol(previousLine, i) || IsSymbol(line, i) || IsSymbol(nextLine, i)) // part 1
+                    result = true;
             }
 
-            return false;
+            return result;
+        }
+
+        public void AddNumberToPart2(int line, int column, int number) {
+            bool isKeyExists = Part2.TryGetValue((line, column), out var intList);
+            if (isKeyExists && intList != null) {
+                intList.Add(number);
+            }
+            else {
+                Part2.Add((line, column), new List<int>() { int.Parse(NumberBuffer)});
+            }
         }
 
         public static bool IsSymbol(string line, int i)
