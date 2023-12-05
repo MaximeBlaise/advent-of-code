@@ -34,7 +34,7 @@ namespace AdventOfCode2023.Days.Day3
             var part2filtered = Part2.Where(x => x.Value.Count == 2);
             int sumPart2 = 0;
             foreach(var part2item in part2filtered) {
-                Console.WriteLine($"({part2item.Key.Item1},{part2item.Key.Item1}) -> {string.Join(',', part2item.Value)}");
+                Console.WriteLine($"({part2item.Key.Item1},{part2item.Key.Item2}) -> {string.Join(',', part2item.Value)}");
                 int currentSum = part2item.Value[0] * part2item.Value[1];
                 sumPart2 += currentSum;
             }
