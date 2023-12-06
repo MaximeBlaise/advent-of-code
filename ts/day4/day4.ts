@@ -7,11 +7,11 @@ interface CardDict {
 }
 
 async function main() {
-    let lines = getLines(4, false);
-    let cards: Card[] = readFromLines(lines);
+    const lines = getLines(4, false);
+    const cards: Card[] = readFromLines(lines);
 
     // part 1
-    let part1sum: number = cards.map(c => computeValue(c)).reduce((sum, current) => sum + current)
+    const part1sum: number = cards.map(c => computeValue(c)).reduce((sum, current) => sum + current)
     console.log(`Part 1 sum: ${part1sum}`);
 
     // init part 2
@@ -24,12 +24,12 @@ async function main() {
 
     // part 2
     cards.map(c => {
-        let nbWinning: number = nbWinningDict[c.id];
+        const nbWinning: number = nbWinningDict[c.id];
         for (let index = c.id + 1; index <= c.id + nbWinning; index++) {
             userCardsDict[index] = userCardsDict[index] + userCardsDict[c.id];
         }
     });
-    let part2sum = cards.map(c => userCardsDict[c.id]).reduce((sum, current) => sum + current);
+    const part2sum = cards.map(c => userCardsDict[c.id]).reduce((sum, current) => sum + current);
     console.log(`Part 2 sum: ${part2sum}`);
 }
 

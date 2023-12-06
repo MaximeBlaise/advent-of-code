@@ -1,8 +1,8 @@
 import * as fs from "fs";
 
 export function getLines(day: number, isSample: boolean) {
-    let suffix: string = isSample ? 'sample': 'input';
-    let path: string = `inputs/day${day}_${suffix}.txt`;
+    const suffix: string = isSample ? 'sample': 'input';
+    const path: string = `inputs/day${day}_${suffix}.txt`;
     return getLinesFromPath(path);
 }
 
