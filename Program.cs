@@ -1,6 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using AdventOfCode2023.Days.Day5;
+using AdventOfCode2023.Days.Day6;
 
 Console.WriteLine("Hello, World!");
 
-Day5Runner.Run(isSample: false);
+Day6Runner.Run(isSample: false);
