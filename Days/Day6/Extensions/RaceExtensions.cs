@@ -8,7 +8,7 @@ namespace AdventOfCode2023.Days.Day6.Extensions
             int numberOfWays = 0;
             for (int time = 1; time < race.Time; time++)
             {
-                int yourDistance = (race.Time - time) * time;
+                long yourDistance = (race.Time - time) * time;
                 if (yourDistance > race.Distance)
                     numberOfWays++;
             }
@@ -18,12 +18,20 @@ namespace AdventOfCode2023.Days.Day6.Extensions
         public static List<Race> ReadFromLines(string[] lines) {
             if (lines == null || lines.Length < 2)
                 return new List<Race>();
-            List<int> times = GetValuesFromLine(lines[0]);
-            List<int> distances = GetValuesFromLine(lines[1]);
+            List<long> times = GetValuesFromLine(lines[0]);
+            List<long> distances = GetValuesFromLine(lines[1]);
             return ReadFromValues(times, distances);
         }
 
-        private static List<Race> ReadFromValues(List<int> times, List<int> distances) {
+        public static List<Race> ReadFromLinesPart2(string[] lines) {
+            if (lines == null || lines.Length < 2)
+                return new List<Race>();
+            List<long> times = GetValuesFromLine(lines[0].Replace(" ", ""));
+            List<long> distances = GetValuesFromLine(lines[1].Replace(" ", ""));
+            return ReadFromValues(times, distances);
+        }
+
+        private static List<Race> ReadFromValues(List<long> times, List<long> distances) {
             if (!times.Any() || !distances.Any() || times.Count != distances.Count)
                 return new List<Race>();
 
@@ -39,10 +47,10 @@ namespace AdventOfCode2023.Days.Day6.Extensions
             return races;
         }
 
-        private static List<int> GetValuesFromLine(string line)
+        private static List<long> GetValuesFromLine(string line)
             => line.Split(":")[1].Trim().Split(" ")
                 .Where(x => !string.IsNullOrWhiteSpace(x))
-                .Select(x => int.Parse(x)).ToList();
+                .Select(x => long.Parse(x)).ToList();
 
         
     }
